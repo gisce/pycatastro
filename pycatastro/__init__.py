@@ -4,6 +4,13 @@ from lxml import etree
 import xmltodict
 
 
+try:
+    __version__ = __import__('pkg_resources') \
+        .get_distribution(__name__).version
+except Exception, e:
+    __version__ = 'unknown'
+
+
 class PyCatastro(object):
     base_url = "http://ovc.catastro.meh.es/ovcservweb/OVCSWLocalizacionRC"
 

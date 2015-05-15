@@ -8,5 +8,10 @@ setup(
     license='GPLv3',
     author='GISCE-TI, SL',
     author_email='devel@gisce.net',
+    install_requires=[
+        'lxml',
+        'requests',
+        'xmltodict',
+    ],
     description='Module for Spanish Catastro'
 )
