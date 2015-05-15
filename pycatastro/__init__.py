@@ -1,6 +1,5 @@
 # coding=utf-8
 import requests
-from lxml import etree
 import xmltodict
 
 
@@ -217,11 +216,10 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCallejero.asmx/ConsultaProvincia"
         response = requests.get(url)
-        tree = etree.fromstring(response.content)
-        return elem2dict(tree)
+        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
 
     @classmethod
-    def ConsultaMunicipioCodigos(cls):
+    def ConsultaMunicipioCodigos(cls, provincia, municipio):
         """Proporciona un listado de todos los nombres de los municipios de una provincia.
 
            Proporciona un listado de todos los nombres de los municipios de una
@@ -241,8 +239,7 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCallejero.asmx/ConsultaMunicipio"
         response = requests.get(url, params=params)
-        tree = etree.fromstring(response.content)
-        return elem2dict(tree)
+        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
 
     @classmethod
     def ConsultaViaCodigos(cls, provincia, municipio, tipovia=None, nombrevia=None):
@@ -267,11 +264,10 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCallejero.asmx/ConsultaVia"
         response = requests.get(url, params=params)
-        tree = etree.fromstring(response.content)
-        return elem2dict(tree)
+        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
 
     @classmethod
-    def ConsultaNumeroCodigos(cls, provincia, municipio, tipovia, nombrevia):
+    def ConsultaNumeroCodigos(cls, provincia, municipio, tipovia, nombrevia,numero):
         """Proporciona la referencia catastral de la finca correspondiente.
 
            Proporciona, o bien la referencia catastral de la finca correspondiente
@@ -299,8 +295,7 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCallejero.asmx/ConsultaVia"
         response = requests.get(url, params=params)
-        tree = etree.fromstring(response.content)
-        return elem2dict(tree)
+        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
 
     @classmethod
     def Consulta_DNPLOC_Codigos(cls, provincia, municipio, sigla, nombrevia, numero, bloque=None, escalera=None, planta=None, puerta=None):
@@ -343,8 +338,7 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCallejero.asmx/Consulta_DNPLOC"
         response = requests.get(url, params=params)
-        tree = etree.fromstring(response.content)
-        return elem2dict(tree)
+        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
 
     @classmethod
     def Consulta_DNPRC_Codigos(cls, provincia, municipio, rc):
@@ -368,8 +362,7 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCallejero.asmx/Consulta_DNPRC"
         response = requests.get(url, params=params)
-        tree = etree.fromstring(response.content)
-        return elem2dict(tree)
+        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
 
     @classmethod
     def Consulta_DNPPP_Codigos(cls, provincia, municipio, poligono, parcela):
@@ -395,8 +388,7 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCallejero.asmx/Consulta_DNPPP"
         response = requests.get(url, params=params)
-        tree = etree.fromstring(response.content)
-        return elem2dict(tree)
+        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
 
     @classmethod
     def Consulta_RCCOOR(cls, srs, x, y):
@@ -417,7 +409,7 @@ class PyCatastro(object):
         params = {
             "Coordenada_X": str(x),
             "Coordenada_Y": str(y)}
-        if type(srx) == str:
+        if type(srs) == str:
             params["SRS"] = srs
         else:
             params["SRS"] = "EPSG:"+str(srs)
