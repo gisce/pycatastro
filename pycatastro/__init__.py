@@ -27,6 +27,7 @@ class PyCatastro(object):
         response = requests.get(url)
         return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
 
+
     @classmethod
     def ConsultaMunicipio(cls, provincia, municipio=None):
         """Proporciona un listado de todos los municipios de una provincia.
@@ -47,11 +48,14 @@ class PyCatastro(object):
 
         params = {'Provincia': provincia}
         if municipio:
-            params['Municipio']= municipio
+            params['Municipio'] = municipio
+        else:
+            params['Municipio'] = ''
 
         url = cls.base_url + "/OVCCallejero.asmx/ConsultaMunicipio"
         response = requests.get(url, params=params)
         return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
+
 
     @classmethod
     def ConsultaVia(cls, provincia, municipio, tipovia=None, nombrevia=None):
@@ -75,8 +79,12 @@ class PyCatastro(object):
                   'Municipio': municipio}
         if tipovia:
             params['TipoVia'] = tipovia
+        else:
+            params['TipoVia'] = ''
         if nombrevia:
             params['NombreVia'] = nombrevia
+        else:
+            params['NombreVia'] = ''
 
         url = cls.base_url + "/OVCCallejero.asmx/ConsultaVia"
         response = requests.get(url, params=params)
@@ -144,12 +152,20 @@ class PyCatastro(object):
                   'Numero': str(numero)}
         if bloque:
             params['Bloque'] = str(bloque)
+        else:
+            params['Bloque'] = ''
         if escalera:
             params['Escalera'] = escalera
+        else:
+            params['Escalera'] = ''
         if planta:
             params['Planta'] = str(planta)
+        else:
+            params['Planta'] = ''
         if puerta:
             params['Puerta'] = str(puerta)
+        else:
+            params['Puerta'] = ''
 
         url = cls.base_url + "/OVCCallejero.asmx/Consulta_DNPLOC"
         response = requests.get(url, params=params)
@@ -230,6 +246,9 @@ class PyCatastro(object):
            municipios de la provincia.También proporciona información de si existe
            cartografía catastral (urbana o rústica) de cada municipio.
 
+           :param str: Nombre de la provincia
+           :param str: Nombre del municipio
+
            :return: Retorna un dicionario con los datos de la consutla
            :rtype: dict
         """
@@ -253,14 +272,26 @@ class PyCatastro(object):
            coincidencia en el tipo de la vía. En caso de que el parámetro
            "NombreVia" no tenga ningún valor, el servicio devuelve todas
            las vías del municipio del "TipoVia" indicado.
+
+           :param str: Nombre de provincia
+           :param str: Nombre del municipio
+           :param str: Opcional,Tipo de via
+           :param str: Nombre de via
+
+           :return: Retorna un dicionario con los datos de la consutla
+           :rtype: dict
         """
 
         params = {'Provincia': provincia,
                   'Municipio': municipio}
         if nombrevia:
             params['NombreVia'] = nombrevia
+        else:
+            params['NombreVia'] = ''
         if tipovia:
             params['TipoVia'] = tipovia
+        else:
+            params['TipoVia'] = ''
 
         url = cls.base_url + "/OVCCallejero.asmx/ConsultaVia"
         response = requests.get(url, params=params)
@@ -328,13 +359,21 @@ class PyCatastro(object):
             'Calle': nombrevia,
             'Numero': str(numero)}
         if bloque:
-            params['Bloque']= bloque
+            params['Bloque'] = bloque
+        else:
+            params['Bloque'] = ''
         if planta:
             params['Escalera'] = escalera
+        else:
+            params['Escalera'] = ''
         if puerta:
             params['Puerta'] = str(puerta)
+        else:
+            params['Puerta'] = ''
         if escalera:
             params['Escalera'] = str(escalera)
+        else:
+            params['Escalera'] = ''
 
         url = cls.base_url + "/OVCCallejero.asmx/Consulta_DNPLOC"
         response = requests.get(url, params=params)
