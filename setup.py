@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='pycatastro',
-    version='0.1.1',
+    version='0.1.2',
     packages=find_packages(),
     url='https://github.com/gisce/pycatastro',
     license='GPLv3',
