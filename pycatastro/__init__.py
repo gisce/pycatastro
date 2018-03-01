@@ -122,6 +122,7 @@ class PyCatastro(object):
         response = requests.get(url, params=params)
         return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
 
+    @classmethod
     def Consulta_DNPLOC(cls, provincia, municipio, sigla, calle, numero, bloque=None, escalera=None, planta=None,puerta=None):
         """Proporciona la lista de todos los inmuebles coincidentes o sus datos.
 
