@@ -454,7 +454,7 @@ class PyCatastro(object):
         else:
             params["SRS"] = "EPSG:"+str(srs)
 
-        url = cls.base_url + "/OVCCoordenadas.asmx?op=Consulta_RCCOOR"
+        url = cls.base_url + "/OVCCoordenadas.asmx/Consulta_RCCOOR"
         response = requests.get(url, params=params)
         return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
 
