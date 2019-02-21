@@ -432,18 +432,22 @@ class PyCatastro(object):
 
     @classmethod
     def Consulta_RCCOOR(cls, srs, x, y):
-        """A partir de unas coordenadas se obtiene la referencia catastral.
+        """
+        A partir de unas coordenadas se obtiene la referencia catastral.
 
-           A partir de unas coordenadas (X e Y) y su sistema de referencia se
-           obtiene la referencia catastral de la parcela localizada en ese punto
-           así como el domicilio (municipio, calle y número o polígono, parcela y
-           municipio).
+        A partir de unas coordenadas (X e Y) y su sistema de referencia se
+        obtiene la referencia catastral de la parcela localizada en ese punto
+        así como el domicilio (municipio, calle y número o polígono, parcela y
+        municipio).
 
-           :param str,int: Sistema de coordenadas
-           :param str,int,float: Coordanda x
-           :param str,int,float: Coordenada Y
-           :return: Retorna un dicionario con los datos de la consutla
-           :rtype: dict
+        :param srs: Sistema de coordenadas
+        :type srs:str,int
+        :param x: Coordanda x
+        :type x: str,int,float
+        :param y: Coordenada Y
+        :type y: str,int,float
+        :return: Retorna un dicionario con los datos de la consutla
+        :rtype: dict
         """
 
         params = {
