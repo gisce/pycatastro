@@ -375,6 +375,10 @@ class PyCatastro(object):
             params['Escalera'] = str(escalera)
         else:
             params['Escalera'] = ''
+        if planta:
+            params["Planta"] = str(planta)
+        else:
+            params["Planta"] = ""
 
         url = cls.base_url + "/OVCCallejero.asmx/Consulta_DNPLOC"
         response = requests.get(url, params=params)
