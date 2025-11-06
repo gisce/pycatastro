@@ -1,6 +1,7 @@
 # coding=utf-8
 import requests
 import xmltodict
+import xml.parsers.expat
 
 
 try:
@@ -12,6 +13,38 @@ except Exception as e:
 
 class PyCatastro(object):
     base_url = "http://ovc.catastro.meh.es/ovcservweb/OVCSWLocalizacionRC"
+
+    @staticmethod
+    def _safe_parse_xml(content):
+        """
+        Safely parse XML content, handling malformed XML errors.
+        
+        :param content: XML content to parse
+        :return: Parsed dictionary or error dictionary if parsing fails
+        :rtype: dict
+        """
+        if not content:
+            return {
+                'error': 'XML parsing error',
+                'error_type': 'EmptyContent',
+                'error_message': 'No content to parse'
+            }
+        try:
+            return xmltodict.parse(content, process_namespaces=False, xml_attribs=False)
+        except xml.parsers.expat.ExpatError as e:
+            # Return a dictionary with error information
+            return {
+                'error': 'XML parsing error',
+                'error_type': 'ExpatError',
+                'error_message': str(e)
+            }
+        except (TypeError, ValueError) as e:
+            # Handle invalid content type or value
+            return {
+                'error': 'XML parsing error',
+                'error_type': type(e).__name__,
+                'error_message': str(e)
+            }
 
     @classmethod
     def ConsultaProvincia(cls):
@@ -25,7 +58,7 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCallejero.asmx/ConsultaProvincia"
         response = requests.get(url)
-        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
+        return cls._safe_parse_xml(response.content)
 
 
     @classmethod
@@ -54,7 +87,7 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCallejero.asmx/ConsultaMunicipio"
         response = requests.get(url, params=params)
-        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
+        return cls._safe_parse_xml(response.content)
 
 
     @classmethod
@@ -88,7 +121,7 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCallejero.asmx/ConsultaVia"
         response = requests.get(url, params=params)
-        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
+        return cls._safe_parse_xml(response.content)
 
     @classmethod
     def ConsultaNumero(cls, provincia, municipio, tipovia, nombrevia, numero):
@@ -120,7 +153,7 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCallejero.asmx/ConsultaNumero"
         response = requests.get(url, params=params)
-        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
+        return cls._safe_parse_xml(response.content)
 
     @classmethod
     def Consulta_DNPLOC(cls, provincia, municipio, sigla, calle, numero, bloque=None, escalera=None, planta=None,puerta=None):
@@ -170,7 +203,7 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCallejero.asmx/Consulta_DNPLOC"
         response = requests.get(url, params=params)
-        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
+        return cls._safe_parse_xml(response.content)
 
     @classmethod
     def Consulta_DNPRC(cls, provincia, municipio, rc):
@@ -193,7 +226,7 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCallejero.asmx/Consulta_DNPRC"
         response = requests.get(url, params=params)
-        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
+        return cls._safe_parse_xml(response.content)
 
     @classmethod
     def Consulta_DNPPP(cls, provincia, municipio, poligono, parcela):
@@ -218,7 +251,7 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCallejero.asmx/Consulta_DNPPP"
         response = requests.get(url, params=params)
-        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
+        return cls._safe_parse_xml(response.content)
 
     @classmethod
     def ConsultaProvincia(cls):
@@ -233,7 +266,7 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCallejero.asmx/ConsultaProvincia"
         response = requests.get(url)
-        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
+        return cls._safe_parse_xml(response.content)
 
     @classmethod
     def ConsultaMunicipioCodigos(cls, provincia, municipio):
@@ -259,7 +292,7 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCallejero.asmx/ConsultaMunicipio"
         response = requests.get(url, params=params)
-        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
+        return cls._safe_parse_xml(response.content)
 
     @classmethod
     def ConsultaViaCodigos(cls, provincia, municipio, tipovia=None, nombrevia=None):
@@ -296,7 +329,7 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCallejero.asmx/ConsultaVia"
         response = requests.get(url, params=params)
-        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
+        return cls._safe_parse_xml(response.content)
 
     @classmethod
     def ConsultaNumeroCodigos(cls, provincia, municipio, tipovia, nombrevia,numero):
@@ -327,7 +360,7 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCallejero.asmx/ConsultaVia"
         response = requests.get(url, params=params)
-        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
+        return cls._safe_parse_xml(response.content)
 
     @classmethod
     def Consulta_DNPLOC_Codigos(cls, provincia, municipio, sigla, nombrevia, numero, bloque=None, escalera=None, planta=None, puerta=None):
@@ -382,7 +415,7 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCallejero.asmx/Consulta_DNPLOC"
         response = requests.get(url, params=params)
-        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
+        return cls._safe_parse_xml(response.content)
 
     @classmethod
     def Consulta_DNPRC_Codigos(cls, provincia, municipio, rc):
@@ -406,7 +439,7 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCallejero.asmx/Consulta_DNPRC"
         response = requests.get(url, params=params)
-        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
+        return cls._safe_parse_xml(response.content)
 
     @classmethod
     def Consulta_DNPPP_Codigos(cls, provincia, municipio, poligono, parcela):
@@ -432,7 +465,7 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCallejero.asmx/Consulta_DNPPP"
         response = requests.get(url, params=params)
-        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
+        return cls._safe_parse_xml(response.content)
 
     @classmethod
     def Consulta_RCCOOR(cls, srs, x, y):
@@ -455,8 +488,8 @@ class PyCatastro(object):
         """
 
         params = {
-            "Coordenada_X": str(x),
-            "Coordenada_Y": str(y)}
+            "Coordenada_X": x,
+            "Coordenada_Y": y}
         if type(srs) == str:
             params["SRS"] = srs
         else:
@@ -464,7 +497,7 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCoordenadas.asmx/Consulta_RCCOOR"
         response = requests.get(url, params=params)
-        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
+        return cls._safe_parse_xml(response.content)
 
     @classmethod
     def Consulta_RCCOOR_Distancia(cls, srs, x, y):
@@ -494,7 +527,7 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCoordenadas.asmx/Consulta_RCCOOR_Distancia"
         response = requests.get(url, params=params)
-        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
+        return cls._safe_parse_xml(response.content)
 
     @classmethod
     def Consulta_CPMRC(cls, provicia, municipio, srs, rc):
@@ -521,4 +554,4 @@ class PyCatastro(object):
 
         url = cls.base_url + "/OVCCoordenadas.asmx/Consulta_CPMRC"
         response = requests.get(url, params=params)
-        return xmltodict.parse(response.content, process_namespaces=False, xml_attribs=False)
+        return cls._safe_parse_xml(response.content)
