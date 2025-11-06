@@ -23,6 +23,12 @@ class PyCatastro(object):
         :return: Parsed dictionary or error dictionary if parsing fails
         :rtype: dict
         """
+        if not content:
+            return {
+                'error': 'XML parsing error',
+                'error_type': 'EmptyContent',
+                'error_message': 'No content to parse'
+            }
         try:
             return xmltodict.parse(content, process_namespaces=False, xml_attribs=False)
         except xml.parsers.expat.ExpatError as e:
@@ -30,6 +36,13 @@ class PyCatastro(object):
             return {
                 'error': 'XML parsing error',
                 'error_type': 'ExpatError',
+                'error_message': str(e)
+            }
+        except (TypeError, ValueError) as e:
+            # Handle invalid content type or value
+            return {
+                'error': 'XML parsing error',
+                'error_type': type(e).__name__,
                 'error_message': str(e)
             }
 
