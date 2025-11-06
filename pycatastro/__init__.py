@@ -488,8 +488,8 @@ class PyCatastro(object):
         """
 
         params = {
-            "Coordenada_X": str(x),
-            "Coordenada_Y": str(y)}
+            "Coordenada_X": x,
+            "Coordenada_Y": y}
         if type(srs) == str:
             params["SRS"] = srs
         else:
